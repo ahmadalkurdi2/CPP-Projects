@@ -1,21 +1,9 @@
-#include <iostream>
-#include <ctime>
-#include <limits>
+#include<iostream>
 
 using namespace std;
 
-enum enWinner
-{
-	Player1 = 1,
-	Computer,
-	Draw
-};
-enum enGameChoice
-{
-	Stone = 1,
-	Paper,
-	Scissors
-};
+enum enWinner { Player1 = 1, Computer, Draw };
+enum enGameChoice { Stone = 1, Paper, Scissors };
 
 struct stGameResults
 {
@@ -39,10 +27,8 @@ int RandomNumber(int From, int To)
 
 void ResetScreen()
 {
-#if defined(_WIN32) || defined(__APPLE__)
 	system("cls");
 	system("color 09");
-#endif
 }
 
 string Tabs(short NumberOfTabs)
@@ -57,7 +43,7 @@ short ReadHowManyRounds()
 {
 	short GameRounds{ 0 };
 	cout << "How many rounds do you want to play? ";
-	while (!(cin >> GameRounds) || GameRounds < 1 || GameRounds > 10)
+	while (!(cin >> GameRounds) || GameRounds < 1 || GameRounds>10)
 	{
 		cin.clear();
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -69,8 +55,8 @@ short ReadHowManyRounds()
 enGameChoice ReadPlayer1Choice()
 {
 	short Choice{ 0 };
-	cout << "\nYour Choice: [1]:Stone, [2]:Paper, [3]:Scissors? ";
-	while (!(cin >> Choice) || Choice < 1 || Choice > 3)
+	cout << "\nYour Choice: \[1]\:Stone, \[2]\:Paper, \[3]\:Scissors? ";
+	while (!(cin >> Choice) || Choice < 1 || Choice>3)
 	{
 		cin.clear();
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -108,19 +94,18 @@ enWinner WhoWonTheRound(stRoundInfo& RoundInfo)
 
 string WinnerName(enWinner Winner)
 {
-	string WinnerName[]{ "Player1", "Computer", "No Winner" };
+	string WinnerName[] { "Player1", "Computer", "No Winner" };
 	return WinnerName[Winner - 1];
 }
 
 string ChoiceName(enGameChoice Choice)
 {
-	string RoundChoice[]{ "Stone", "Paper", "Scissors" };
+	string RoundChoice[] { "Stone", "Paper", "Scissors" };
 	return RoundChoice[Choice - 1];
 }
 
 void SetWinnerScreenColor(enWinner Winner)
 {
-#if defined(_WIN32) || defined(__APPLE__)
 	switch (Winner)
 	{
 	case enWinner::Player1:
@@ -134,17 +119,15 @@ void SetWinnerScreenColor(enWinner Winner)
 		system("color 06");
 		break;
 	}
-#endif
 }
 
 void PrintRoundResults(stRoundInfo& RoundInfo)
 {
-	cout << "\n____________Round [" << RoundInfo.RoundNumber << "]____________\n\n";
+	cout << "\n\_\_\_\_\_\_\_\_\_\_\_\_Round \[" << RoundInfo.RoundNumber << "]\_\_\_\_\_\_\_\_\_\_**\n\n";
 	cout << "Player1 Choice: " << ChoiceName(RoundInfo.Player1Choice) << "\n";
 	cout << "Computer Choice: " << ChoiceName(RoundInfo.ComputerChoice) << "\n";
-	cout << "Round Winner: [" << RoundInfo.RoundWinnerName << "]\n";
-	cout << "__________________________________\n"
-		<< endl;
+	cout << "Round Winner: \[" << RoundInfo.RoundWinnerName << "]\n";
+	cout << "**\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\n" << endl;
 	SetWinnerScreenColor(RoundInfo.RoundWinner);
 }
 
@@ -176,22 +159,23 @@ stGameResults PlayGame(short HowManyRounds)
 	short Player1WinTimes{ 0 }, ComputerWinTimes{ 0 }, DrawTimes{ 0 };
 	for (short GameRound{ 1 }; GameRound <= HowManyRounds; GameRound++)
 	{
-		cout << "\nRound [" << GameRound << "] begins: \n";
+		cout << "\nRound \[" << GameRound << "] begins: \n";
 		RoundInfo.RoundNumber = GameRound;
 		RoundInfo.Player1Choice = ReadPlayer1Choice();
 		RoundInfo.ComputerChoice = GetComputerChoice();
 		RoundInfo.RoundWinner = WhoWonTheRound(RoundInfo);
 		RoundInfo.RoundWinnerName = WinnerName(RoundInfo.RoundWinner);
 
-		if (RoundInfo.RoundWinner == enWinner::Player1)
-			Player1WinTimes++;
-		else if (RoundInfo.RoundWinner == enWinner::Computer)
-			ComputerWinTimes++;
-		else
-			DrawTimes++;
+			if (RoundInfo.RoundWinner == enWinner::Player1)
+				Player1WinTimes++;
+			else if (RoundInfo.RoundWinner == enWinner::Computer)
+				ComputerWinTimes++;
+			else
+				DrawTimes++;
 		PrintRoundResults(RoundInfo);
 	}
 	return FillGameResults(HowManyRounds, Player1WinTimes, ComputerWinTimes, DrawTimes);
+
 }
 
 void ShowGameOverScreen()
@@ -205,13 +189,18 @@ void ShowGameOverScreen()
 
 void ShowFinalGameResults(stGameResults GameResults)
 {
-	cout << Tabs(5) << "_____________________ [Game Results]_____________________\n\n";
-	cout << Tabs(5) << "Game Rounds : " << GameResults.GameRounds << endl;
-	cout << Tabs(5) << "Player1 won times : " << GameResults.Player1WinTimes << endl;
-	cout << Tabs(5) << "Computer won times : " << GameResults.ComputerWinTimes << endl;
-	cout << Tabs(5) << "Draw times : " << GameResults.DrawTimes << endl;
-	cout << Tabs(5) << "Final Winner : " << GameResults.GameWinnerName << endl;
-	cout << Tabs(5) << "___________________________________________________________\n";
+	cout << Tabs(5) << "\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ \[Game Results]\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_****\n\n";
+	cout << Tabs(5) << "Game Rounds : " <<
+		GameResults.GameRounds << endl;
+	cout << Tabs(5) << "Player1 won times : " <<
+		GameResults.Player1WinTimes << endl;
+	cout << Tabs(5) << "Computer won times : " <<
+		GameResults.ComputerWinTimes << endl;
+	cout << Tabs(5) << "Draw times : " <<
+		GameResults.DrawTimes << endl;
+	cout << Tabs(5) << "Final Winner : " <<
+		GameResults.GameWinnerName << endl;
+	cout << Tabs(5) << "****\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\n";
 	SetWinnerScreenColor(GameResults.GameWinner);
 }
 
@@ -224,8 +213,7 @@ void StartGame()
 		stGameResults GameResults = PlayGame(ReadHowManyRounds());
 		ShowGameOverScreen();
 		ShowFinalGameResults(GameResults);
-		cout << endl
-			<< Tabs(5) << "Do you want to play again? Y/N? ";
+		cout << endl << Tabs(5) << "Do you want to play again? Y/N? ";
 		cin >> PlayAgain;
 	} while (toupper(PlayAgain) == 'Y');
 }
