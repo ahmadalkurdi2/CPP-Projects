@@ -40,7 +40,7 @@ void ResetScreen()
 {
 #ifdef _WIN32
 	system("cls");
-	system("color 09");
+	system("color 03");
 #endif
 }
 
